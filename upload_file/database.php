@@ -3,8 +3,8 @@
  $user="root";
  $password="";
  $db="upload_file";
- $conn = mysqli_connect($host,$user,$password,$db);
- if (!$conn){
+ $kon = mysqli_connect($host,$user,$password,$db);
+ if (!$kon){
        die("Koneksi gagal:".mysqli_connect_error()); 
  }
  else {
