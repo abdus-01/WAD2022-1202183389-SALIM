@@ -2,28 +2,32 @@
 <?php
 
 $host="localhost";
-Suser="root";
+$user="root";
 $pass="";
 $db="upload_file";
-mysql_connect($host, $user, $pass);
-mysql_select_db($db);
+$conn=mysqli_connect($host, $user, $pass,$db);
+#mysqli_select_db($db);
 
 
-if(isset($_POST['username'])){
+if(isset($_POST['login'])){
     $username=$_POST['username'];
     $password=$_POST['password'];
     $sql="select * from users where username ='".$username."' AND password='".$password."' limit 1 ";
-    $result=mysql_query($sql);
-    if(mysql_num_rows($result)==1){
+    $result=mysqli_query($conn,$sql);
+    if(mysqli_num_rows($result)==1){
         echo "you have successfully logged in";
-        redirect(index.php);
-        $cookie_name = Susername;
+        header("Location: index.php");
+        $cookie_name = $username;
         $cookie_value = 1;
-        setcookie($cookie_name, $cookie_value, time() + (60*60), "/");
-        exit();
+        setcookie($cookie_name, $cookie_value, time() + (60*60*24), "/");
+        session_start();
+        #if(isset())
+            exit();
     }else{
-        echo "incorrect username and/or password";
-        exit();
+        echo "<script>
+        alert('wrong password and/or username');
+        </script>";
+       
     }
 }
 
@@ -42,14 +46,16 @@ if(isset($_POST['register'])==1){
 </head>
 <body>
 
-<form action='#' method="POST">
+<form action='' method="POST">
     username:<input type="text" name="username" placeholder="enter your user name">
     </br>
     password:<input type="password" name="password" placeholder="enter your password">
     </br>
-    <input type="submit" name="submit" value="Log in">
+    <button type="submit" name="login" >log in</button>
     </br>
-    <input type="submit" name="submit1" value="register">
+    <h6>you do not have an account?</h6><a href="register.php"><li><i>register</i></li></a>
+    </br>
+    <h6>forgot password?</h6><a href="forgotpassword.php"><li><i>forgot password</i></li></a>
     </br>
     
 
@@ -57,3 +63,5 @@ if(isset($_POST['register'])==1){
 
 </html>
 
+<?php mysqli_close($conn);
+?>
